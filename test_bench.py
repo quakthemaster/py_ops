@@ -1,38 +1,25 @@
-import math
-def fn(x):
-    return(x+1)
-
-
-def test(fn,x,y):
-    return(fn(x)/y)
 import univarroot
-
-def Rd1_fn(fn,x,width): #This is the computation of first order right hand derivative
-    derivative = fn(x+width)-fn(x)
-    derivative = derivative/width
-    return(derivative)
-a=-3
-b=2
-epsilon = 0.01
-width =0.0001
-
 import numpy
-alpha = (a+b)/2
-x_vector = numpy.array(a,b,width)
-# while(1):
-#
-#     if((Rd1_fn(fn,a,width)*Rd1_fn(fn,alpha,width) < 0)):
-#         b = alpha
-#     else:
-#         a = alpha
-#
-#     print(Rd1_fn(fn, a, width))
-#     print (Rd1_fn(fn, alpha, width))
-#     print(alpha)
-#     print(a)
-#     print(b)
-# print(a)
-
-# root = univarroot.bisection_method(poly,-2,2,0.001,0.00001)
-# root = test(poly,2,0.1)
-# print(root)
+import math
+import time
+import matplotlib.pyplot as plt
+a = -50
+b = 100
+epsilon = 0.01
+width = 0.01
+x_vector = numpy.arange(a,b,width)
+def fn(x):
+    return(math.pow(x,3) - math.pow(x,2) + 4)
+t1 = time.clock()
+root1 = univarroot.bisection_method(fn,a,b,epsilon,width)
+print(root1)
+t2 = time.clock()
+root2 = univarroot.exhaustive(fn,x_vector)
+print(root2)
+t3 = time.clock()
+print(t2-t1)
+print(t3-t2)
+fnv = numpy.vectorize(fn)
+plt.plot(fnv(x_vector),x_vector)
+plt.grid(1)
+plt.show()
