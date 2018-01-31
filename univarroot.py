@@ -40,14 +40,14 @@ def exhaustive(fn,x_vector):
     return(roots)
 
 
-def Rd1_fn(fn,x,width): #This is the computation of first order right hand derivative
-    derivative = fn(x+width)-fn(x)
-    derivative = derivative/width
+def d1_fn(fn,x,width): #This is the computation of first order derivative
+    derivative = fn(x+width)-fn(x-width)
+    derivative = derivative/2.0/width
     return(derivative)
 
-def Ld1_fn(fn,x,width): #This is the computation of first order left hand derivative
-    derivative = fn(x)-fn(x-width)
-    derivative = derivative/width
+def d2_fn(fn,x,width): #This is the computation of second order derivative
+    derivative = fn(x+width)- 2*fn(x) +fn(x-width)
+    derivative = derivative/(width*width)
     return(derivative)
 
 def differentiability(fn,x,width,tolerance):
@@ -58,18 +58,18 @@ def differentiability(fn,x,width,tolerance):
 def bisection_method(fn,a,b,epsilon,width):
     alpha = (a+b)/2
     i = 0
-    if ((Rd1_fn(fn, a, width) * Rd1_fn(fn, alpha, width)) < 0 & (fn(a) * fn(b) > 0)):
+    if ((d1_fn(fn, a, width) * d1_fn(fn, alpha, width)) < 0 & (fn(a) * fn(b) > 0)):
         while (abs(a - b) > epsilon):
             i = i + 1
             alpha = (a + b) / 2.0
-            if ((Rd1_fn(fn, a, width) * Rd1_fn(fn, alpha, width)) < 0):
+            if ((d1_fn(fn, a, width) * d1_fn(fn, alpha, width)) < 0):
                 b = alpha
             else:
                 a = alpha
             if (abs(a - b) < epsilon):
                 break
         root = alpha
-    if ((Rd1_fn(fn, a, width) * Rd1_fn(fn, alpha, width)) > 0 & (fn(a) * fn(b) < 0)):
+    if ((d1_fn(fn, a, width) * d1_fn(fn, alpha, width)) > 0 & (fn(a) * fn(b) < 0)):
         while (abs(a - b) > epsilon):
             i = i + 1
             alpha = (a + b) / 2.0
@@ -83,9 +83,10 @@ def bisection_method(fn,a,b,epsilon,width):
     return(root)
 
 
-# def bisection(func_vector,x_vector,a,b,epsilon):
-#     alpha = (a+b)/2
-#
-#    # def newtonraphson(func_vector,x_vector,a,b):
+def newtonraphson(fn,xo,epsilon,width):
+    while(abs(fn(xo)) > epsilon):
+        xn = xo - ((d1_fn(fn,xo,width))/d2_fn(fn,xo,width))
+        xo = xn
+    return(xo)
 # # def gradient(func_vector):
 # # def positive_definite():
